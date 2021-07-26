@@ -388,13 +388,6 @@ var _recipeViewJsDefault = parcelHelpers.interopDefault(_recipeViewJs);
 var _stable = require("core-js/stable");
 var _runtime = require("regenerator-runtime/runtime");
 const recipeContainer = document.querySelector('.recipe');
-const timeout = function(s) {
-    return new Promise(function(_, reject) {
-        setTimeout(function() {
-            reject(new Error(`Request took too long! Timeout after ${s} second`));
-        }, s * 1000);
-    });
-};
 const controlRecipes = async ()=>{
     try {
         const id = window.location.hash.slice(1);
@@ -12530,15 +12523,15 @@ parcelHelpers.export(exports, "state", ()=>state
 parcelHelpers.export(exports, "loadRecipe", ()=>loadRecipe
 );
 var _runtime = require("regenerator-runtime/runtime");
+var _config = require("./config");
+var _helpers = require("./helpers");
 const state = {
     recipe: {
     }
 };
 const loadRecipe = async (id)=>{
     try {
-        const res = await fetch(`https://forkify-api.herokuapp.com/api/v2/recipes/${id}`);
-        const data = await res.json();
-        if (!res.ok) throw new Error(`${data.message} (${res.status})`);
+        const data = await _helpers.getJSON(`${_config.API_URL}/${id}`);
         const { recipe  } = data.data;
         state.recipe = {
             id: recipe.id,
@@ -12552,11 +12545,51 @@ const loadRecipe = async (id)=>{
         };
         console.log(state.recipe);
     } catch (err) {
-        alert(err);
+        // Temp Error Handling
+        console.error(`${err} `);
     }
 };
 
-},{"regenerator-runtime/runtime":"62Qib","@parcel/transformer-js/src/esmodule-helpers.js":"367CR"}],"9e6b9":[function(require,module,exports) {
+},{"regenerator-runtime/runtime":"62Qib","@parcel/transformer-js/src/esmodule-helpers.js":"367CR","./config":"6pr2F","./helpers":"581KF"}],"6pr2F":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "API_URL", ()=>API_URL
+);
+parcelHelpers.export(exports, "TIMEOUT_SEC", ()=>TIMEOUT_SEC
+);
+const API_URL = `https://forkify-api.herokuapp.com/api/v2/recipes`;
+const TIMEOUT_SEC = 10;
+
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"367CR"}],"581KF":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "getJSON", ()=>getJSON
+);
+var _regeneratorRuntime = require("regenerator-runtime");
+var _config = require("./config");
+const timeout = function(s) {
+    return new Promise(function(_, reject) {
+        setTimeout(function() {
+            reject(new Error(`Request took too long! Timeout after ${s} second`));
+        }, s * 1000);
+    });
+};
+const getJSON = async (url)=>{
+    try {
+        const fetchPro = fetch(url);
+        const res = await Promise.race([
+            fetchPro,
+            timeout(_config.TIMEOUT_SEC)
+        ]);
+        const data = await res.json();
+        if (!res.ok) throw new Error(`${data.message} (${res.status})`);
+        return data;
+    } catch (err) {
+        throw err;
+    }
+};
+
+},{"regenerator-runtime":"62Qib","@parcel/transformer-js/src/esmodule-helpers.js":"367CR","./config":"6pr2F"}],"9e6b9":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 var _iconsSvg = require("url:../../img/icons.svg");
@@ -12588,7 +12621,7 @@ class RecipeView {
 }
 exports.default = new RecipeView();
 
-},{"@parcel/transformer-js/src/esmodule-helpers.js":"367CR","url:../../img/icons.svg":"3t5dV","fractional":"5jzJt"}],"3t5dV":[function(require,module,exports) {
+},{"url:../../img/icons.svg":"3t5dV","fractional":"5jzJt","@parcel/transformer-js/src/esmodule-helpers.js":"367CR"}],"3t5dV":[function(require,module,exports) {
 module.exports = require('./bundle-url').getBundleURL() + "icons.d4a14980.svg";
 
 },{"./bundle-url":"3seVR"}],"3seVR":[function(require,module,exports) {
