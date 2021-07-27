@@ -1,0 +1,16 @@
+import   "f4d2c011b2ecca8a316ab6fd70357165:./View.js";
+import   "f4d2c011b2ecca8a316ab6fd70357165:./previewView.js";
+import   "f4d2c011b2ecca8a316ab6fd70357165:url:../../img/icons.svg";
+class $f4d2c011b2ecca8a316ab6fd70357165$var$BookmarksView extends $f4d2c011b2ecca8a316ab6fd70357165$import$bc564d5e62d693bc$9099ad97b570f7c {
+    _parentElement = document.querySelector('.bookmarks__list');
+    _errorMessage = 'No bookmarks yet. Find a nice recipe and bookmark it ;)';
+    _message = '';
+    addHandlerRender(handler) {
+        window.addEventListener('load', handler);
+    }
+    _generateMarkup() {
+        return this._data.map((bookmark)=>$f4d2c011b2ecca8a316ab6fd70357165$import$d6293f58f2b34dc$9099ad97b570f7c.render(bookmark, false)
+        ).join('');
+    }
+}
+var $f4d2c011b2ecca8a316ab6fd70357165$export$9099ad97b570f7c = new $f4d2c011b2ecca8a316ab6fd70357165$var$BookmarksView();

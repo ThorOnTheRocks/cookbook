@@ -1,0 +1,29 @@
+import   "37f17f2cfa7c1f359151dec56797b63a:regenerator-runtime";
+import   "37f17f2cfa7c1f359151dec56797b63a:./config.js";
+const $37f17f2cfa7c1f359151dec56797b63a$var$timeout = (s)=>{
+    return new Promise(function(_, reject) {
+        setTimeout(function() {
+            reject(new Error(`Request took too long! Timeout after ${s} second`));
+        }, s * 1000);
+    });
+};
+const $37f17f2cfa7c1f359151dec56797b63a$export$440419e74e66489a = async (url, uploadData)=>{
+    try {
+        const fetchPro = uploadData ? fetch(url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(uploadData)
+        }) : fetch(url);
+        const res = await Promise.race([
+            fetchPro,
+            $37f17f2cfa7c1f359151dec56797b63a$var$timeout($37f17f2cfa7c1f359151dec56797b63a$import$7d33118c35f7af8f$c5ccdbd82addd8d)
+        ]);
+        const data = await res.json();
+        if (!res.ok) throw new Error(`${data.message} (${res.status})`);
+        return data;
+    } catch (err) {
+        throw err;
+    }
+};
